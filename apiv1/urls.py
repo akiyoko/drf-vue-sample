@@ -6,6 +6,7 @@ from . import views
 router = routers.DefaultRouter()
 router.register('books', views.BookViewSet)
 
+app_name = 'apiv1'
 urlpatterns = [
     path('', include(router.urls)),
 ]

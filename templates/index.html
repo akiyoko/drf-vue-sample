@@ -1,134 +1,191 @@
-<!doctype html>
+{% load static %}
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>DRF Sample</title>
-
-  {# --- css --- #}
-  {# --- Bootstrap4 --- #}
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <!-- CSS -->
+  <!-- BootstrapVue -->
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap@4.3.1/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap-vue@2.0.0-rc.15/dist/bootstrap-vue.min.css"/>
   <style>
-  .ml-auto .dropdown-menu {
-    left: auto !important;
-    right: 0;
-  }
-  main {
-    padding-top: 4em;
-  }
-  [v-cloak] {
-    display: none;
-  }
+    main.container {
+      border: 1px solid #cccccc;
+      margin-top: 4em;
+      padding: 2em;
+      width: 600px;
+    }
+
+    .container.debug {
+      margin-top: 2em;
+    }
+
+    [v-cloak] {
+      display: none;
+    }
   </style>
 </head>
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-  <a class="navbar-brand" href="#">DRF Sample</a>
-  <ul class="navbar-nav ml-auto">
-    <li class="nav-item dropdown">
-      {% if user.is_authenticated %}
-      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">{{ user.get_username }}</a>
-      <div class="dropdown-menu">
-        <a class="dropdown-item" href="{% url 'rest_framework:logout' %}">Logout</a>
-      </div>
-      {% else %}
-      <a class="nav-link" href="{% url 'rest_framework:login' %}">Login</a>
-      {% endif %}
-    </li>
-  </ul>
-</nav>
-
-<main class="container">
-  <div id="app" v-cloak>
-    <div class="form-group row">
-      <label class="col-sm-3 col-form-label">タイトル</label>
-      <div class="col-sm-5">
-        <input type="text" class="form-control" v-model="book.title">
-      </div>
-    </div>
-    <div class="form-group row">
-      <label class="col-sm-3 col-form-label">価格</label>
-      <div class="col-sm-5">
-        <input type="text" class="form-control" v-model="book.price">
-      </div>
-    </div>
-    <div class="col-sm-9 row">
-      <div>
-        <button type="button" class="btn btn-primary" v-on:click="postData" v-show="!isRegistered">登録</button>
-        <button type="button" class="btn btn-primary" v-on:click="putData" v-show="isRegistered">更新</button>
-      </div>
-    </div>
-
-    <pre style="margin-top: 50px;">#{ $data }</pre>
+<body>
+<div id="app" v-cloak>
+  <!-- ヘッダナビゲーション -->
+  <div id="header">
+    <b-navbar type="dark" variant="dark">
+      <a class="navbar-brand" href="/">
+        <img src="{% static 'images/logo.png' %}" width="120">
+      </a>
+      <b-navbar-nav class="ml-auto">
+        {% if user.is_authenticated %}
+          <b-nav-item-dropdown right>
+            <template slot="button-content">{{ user.get_username }}</template>
+            <b-dropdown-item href="{% url 'rest_framework:logout' %}">ログアウト</b-dropdown-item>
+          </b-nav-item-dropdown>
+        {% else %}
+          <b-nav-item href="{% url 'rest_framework:login' %}">ログイン</b-nav-item>
+        {% endif %}
+      </b-navbar-nav>
+    </b-navbar>
   </div>
-</main>
 
-{# --- js --- #}
-{# --- Bootstrap4 --- #}
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-{# --- Vue.js --- #}
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.8/dist/vue.min.js"></script>
-{# --- axios --- #}
-<script src="https://cdn.jsdelivr.net/npm/axios@0.18.0/dist/axios.min.js"></script>
+  <!-- メッセージエリア -->
+  <div id="messages">
+    <b-alert variant="danger" show v-show="message.error" class="mb-0">
+      #{ message.error }
+    </b-alert>
+    <b-alert variant="warning" show v-show="message.warnings.length > 0" class="mb-0">
+      <p v-for="v in message.warnings" class="mb-0">#{ v[1][0] }</p>
+    </b-alert>
+    <b-alert variant="info" show v-show="message.info" class="mb-0">
+      #{ message.info }
+    </b-alert>
+  </div>
+
+  <!-- メインエリア -->
+  <div id="home-page">
+    <main class="container">
+      <p class="h5 mb-4">ホーム</p>
+      <b-form @submit.prevent="submitSave">
+        <div class="row form-group">
+          <label class="col-sm-3 col-form-label">タイトル</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" v-model="form.book.title">
+          </div>
+        </div>
+        <div class="row form-group">
+          <label class="col-sm-3 col-form-label">価格</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" v-model="form.book.price">
+          </div>
+        </div>
+        <div class="row text-center mt-5">
+          <div class="col-sm-12">
+            <b-button type="submit" variant="primary">#{ isCreated ? '更新' : '登録' }</b-button>
+          </div>
+        </div>
+      </b-form>
+    </main>
+  </div>
+
+  <!-- For debug -->
+  <div id="debug">
+    <div class="container debug">
+      <pre>#{ $data }}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- JS -->
+<!-- Vue & BootstrapVue -->
+<script src="https://unpkg.com/@babel/polyfill@7.4.0/dist/polyfill.min.js"></script>
+<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+<script src="https://unpkg.com/bootstrap-vue@2.0.0-rc.15/dist/bootstrap-vue.min.js"></script>
+<!-- axios -->
+<script src="https://unpkg.com/axios@0.18.0/dist/axios.min.js"></script>
 <script>
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+  // CSRFトークンの送信設定
+  axios.defaults.xsrfCookieName = 'csrftoken'
+  axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
-const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api/v1/'
-});
-
-// 構文のバッティングを回避
-Vue.options.delimiters = ['#{', '}'];
-
-const app = new Vue({
-  el: '#app',
-  data: {
-    book: {
-      price: 0
-    },
-    response: null,
-    isRegistered: false,
-    errors: []
-  },
-  methods: {
-    postData: function () {
-      api.post('/books/', {
-        'id': this.book.id,
-        'title': this.book.title,
-        'price': this.book.price
-      })
-      .then(response => {
-        console.log('Success!!');
-        this.book = response.data;
-        this.isRegistered = true;
-        this.response = response;
-      })
-      .catch(error => {
-        console.log('Fail!!');
-        this.response = error.response;
-      })
-    },
-    putData: function () {
-      api.put('/books/' + this.book.id + '/', {
-        'title': this.book.title,
-        'price': this.book.price
-      })
-      .then(response => {
-        console.log('Success!!');
-        this.book = response.data;
-        this.isRegistered = true;
-        this.response = response;
-      })
-      .catch(error => {
-        console.log('Fail!!');
-        this.response = error.response;
-      })
+  // APIクライアント
+  const api = axios.create({
+    baseURL: '/api/v1/',
+    timeout: 5000,
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest'
     }
-  }
-})
+  })
+
+  // Mustache構文のバッティングを回避
+  Vue.options.delimiters = ['#{', '}']
+
+  // Vueインスタンスを作成
+  const app = new Vue({
+    el: '#app',
+    data: {
+      form: {
+        book: {
+          title: '',
+          price: 0
+        }
+      },
+      message: {
+        info: '',
+        warnings: [],
+        error: ''
+      }
+    },
+    computed: {
+      // 登録済みかどうか
+      isCreated: function () {
+        return this.form.book.id !== undefined
+      }
+    },
+    methods: {
+      // 登録・更新ボタン押下時に呼び出されるメソッド
+      submitSave: function () {
+        this.clearMessages()
+        api({
+          method: this.isCreated ? 'put' : 'post',
+          url: this.isCreated ? '/books/' + this.form.book.id + '/' : '/books/',
+          data: {
+            'id': this.form.book.id,
+            'title': this.form.book.title,
+            'price': this.form.book.price
+          }
+        })
+          .then(response => {
+            this.message.info = this.isCreated ? '更新しました。' : '登録しました。'
+            this.form.book = response.data
+          })
+          .catch(error => {
+            const status = error.response ? error.response.status : 500
+            let message
+            if (status === 400) {
+              // バリデーションNG
+              this.message.warnings = Object.entries(error.response.data)
+            } else if (status === 401) {
+              // 認証エラー
+              this.message.error = '認証エラー'
+            } else if (status === 403) {
+              // 権限エラー
+              this.message.error = '権限エラーです。'
+            } else {
+              // その他のエラー
+              message = error.statusText ? error.statusText : '想定外のエラーです。'
+              this.message.error = message
+            }
+          })
+      },
+      // メッセージをクリア
+      clearMessages: function () {
+        this.message.error = ''
+        this.message.warnings = []
+        this.message.info = ''
+      }
+    }
+  })
 </script>
 </body>
 </html>
