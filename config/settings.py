@@ -28,6 +28,7 @@ INSTALLED_APPS = [
 
     # 3rd party apps
     'rest_framework',
+    'djoser',
 
     # My applications
     'apiv1.apps.Apiv1Config',
@@ -114,14 +115,13 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 
-# Authentication
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = 'rest_framework:login'
-
-
 # REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # 追加
     ),
+}
+
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('JWT',),  # 追加
 }
