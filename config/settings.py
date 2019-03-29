@@ -2,7 +2,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     # 3rd party apps
     'rest_framework',
     'djoser',
+    'corsheaders',  # 追加
 
     # My applications
     'apiv1.apps.Apiv1Config',
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # 追加
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,7 +52,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(FRONTEND_DIR, 'dist')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -112,7 +114,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [
+    os.path.join(FRONTEND_DIR, 'dist', 'static'),
+    os.path.join(FRONTEND_DIR, 'src', 'assets'),
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
 
 # REST Framework
@@ -125,3 +131,14 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),  # 追加
 }
+
+
+########
+# CORS #
+########
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+    'localhost:8080',
+    '127.0.0.1:8080',
+)

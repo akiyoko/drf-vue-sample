@@ -1,4 +1,5 @@
 Django==2.2rc1
 djangorestframework==3.9.2
-djangorestframework-simplejwt==4.1.0
+djangorestframework-simplejwt==4.1.1
+django-cors-headers==2.5.2
 djoser==1.5.0
