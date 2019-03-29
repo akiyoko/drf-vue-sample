@@ -14,7 +14,7 @@ const api = axios.create({
 // 共通前処理
 api.interceptors.request.use(function (config) {
   // メッセージをクリア
-  store.dispatch('messages/clearMessages')
+  store.dispatch('message/clearMessages')
   // 認証用トークンがあればリクエストヘッダに乗せる
   const token = localStorage.getItem('access')
   if (token) {
@@ -40,7 +40,7 @@ api.interceptors.response.use(function (response) {
   if (status === 400) {
     // バリデーションNG
     let messages = Object.entries(error.response.data)
-    store.dispatch('messages/setWarningMessages', { messages: messages })
+    store.dispatch('message/setWarningMessages', { messages: messages })
 
   } else if (status === 401) {
     // 認証エラー
@@ -51,18 +51,18 @@ api.interceptors.response.use(function (response) {
       message = '認証エラー'
     }
     // TODO: ログアウト
-    store.dispatch('user/logout')
-    store.dispatch('messages/setErrorMessage', { message: message })
+    store.dispatch('auth/logout')
+    store.dispatch('message/setErrorMessage', { message: message })
 
   } else if (status === 403) {
     // 権限エラー
     message = '権限エラーです。'
-    store.dispatch('messages/setErrorMessage', { message: message })
+    store.dispatch('message/setErrorMessage', { message: message })
 
   } else {
     // その他のエラー
     message = error.statusText ? error.statusText : '想定外のエラーです。'
-    store.dispatch('messages/setErrorMessage', { message: message })
+    store.dispatch('message/setErrorMessage', { message: message })
   }
   return Promise.reject(error)
 })

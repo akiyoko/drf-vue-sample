@@ -21,7 +21,7 @@ const router = new VueRouter({
  */
 router.beforeEach((to, from, next) => {
 
-  const isLoggedIn = store.state.user.isLoggedIn
+  const isLoggedIn = store.getters['auth/isLoggedIn']
   const token = localStorage.getItem('access')
   console.log('to.path=', to.path)
   console.log('isLoggedIn=', isLoggedIn)
@@ -40,7 +40,7 @@ router.beforeEach((to, from, next) => {
       if (token != null) {
         console.log('User is not logged in. Trying to reload again.')
 
-        store.dispatch('user/reload')
+        store.dispatch('auth/reload')
           .then(() => {
             // 再取得できたらそのまま次へ
             console.log('Succeeded to reload. So, free to next.')

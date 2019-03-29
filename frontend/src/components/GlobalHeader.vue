@@ -20,22 +20,22 @@
   export default {
     computed: {
       username: function () {
-        return this.$store.getters['user/username']
+        return this.$store.getters['auth/username']
       },
       isLoggedIn: function () {
-        return this.$store.getters['user/isLoggedIn']
+        return this.$store.getters['auth/isLoggedIn']
       }
     },
     methods: {
       // ログアウトリンク押下
       clickLogout: function () {
-        this.$store.dispatch('user/logout')
-        this.$store.dispatch('messages/setInfoMessage', { message: 'ログアウトしました。' })
+        this.$store.dispatch('auth/logout')
+        this.$store.dispatch('message/setInfoMessage', { message: 'ログアウトしました。' })
         this.$router.replace('/login')
       },
       // ログインリンク押下
       clickLogin: function () {
-        this.$store.dispatch('messages/clearMessages')
+        this.$store.dispatch('message/clearMessages')
         this.$router.replace('/login')
       }
     }

@@ -50,13 +50,13 @@
       // ログインボタン押下
       submitLogin: function () {
         // ログイン
-        this.$store.dispatch('user/login', {
+        this.$store.dispatch('auth/login', {
           username: this.form.username,
           password: this.form.password
         })
-          .then(user => {
+          .then(() => {
             console.log('Login succeeded.')
-            this.$store.dispatch('messages/setInfoMessage', { message: 'ログインしました。' })
+            this.$store.dispatch('message/setInfoMessage', { message: 'ログインしました。' })
             const next = this.$route.query.next || '/'
             this.$router.replace(next)
           })

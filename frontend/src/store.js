@@ -4,7 +4,7 @@ import api from '@/services/api'
 
 Vue.use(Vuex)
 
-const userModule = {
+const authModule = {
   strict: process.env.NODE_ENV !== 'production',
   namespaced: true,
   state: {
@@ -66,7 +66,7 @@ const userModule = {
   }
 }
 
-const messagesModule = {
+const messageModule = {
   strict: process.env.NODE_ENV !== 'production',
   namespaced: true,
   state: {
@@ -130,8 +130,8 @@ const messagesModule = {
 
 const store = new Vuex.Store({
   modules: {
-    user: userModule,
-    messages: messagesModule
+    auth: authModule,
+    message: messageModule
   }
 })
 

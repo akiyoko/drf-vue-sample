@@ -16,7 +16,7 @@
     components: {
       GlobalHeader
     },
-    data: function () {
+    data () {
       return {
         step: 'DashboardPage'
       }

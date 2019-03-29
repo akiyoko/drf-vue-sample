@@ -39,7 +39,7 @@
       GlobalHeader,
       GlobalMessage
     },
-    data: function () {
+    data () {
       return {
         form: {
           book: {
@@ -71,7 +71,7 @@
         })
           .then(response => {
             const message = this.isCreated ? '更新しました。' : '登録しました。'
-            this.$store.dispatch('messages/setInfoMessage', { message: message })
+            this.$store.dispatch('message/setInfoMessage', { message: message })
             this.form.book = response.data
           })
       }
