@@ -4,16 +4,6 @@
   </div>
 </template>
 
-<script>
-  import config from './config';
-
-  export default {
-    mounted: function () {
-      console.log('ROOT_API=', config.ROOT_API)
-    }
-  }
-</script>
-
 <style>
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;

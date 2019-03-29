@@ -3,7 +3,7 @@
     <GlobalHeader/>
     <GlobalMessage/>
 
-    <!-- メイン -->
+    <!-- メインエリア -->
     <main class="container">
       <p class="h5 mb-4">ログイン</p>
       <b-form @submit.prevent="submitLogin">
@@ -26,23 +26,17 @@
         </div>
       </b-form>
     </main>
-
-    <!-- For debug -->
-    <debug :data="$data">LoginPage</debug>
   </div>
 </template>
 
 <script>
-  import userService from '@/services/userService'
   import GlobalHeader from '@/components/GlobalHeader.vue'
   import GlobalMessage from '@/components/GlobalMessage.vue'
-  import Debug from '@/components/Debug.vue'
 
   export default {
     components: {
       GlobalHeader,
-      GlobalMessage,
-      Debug
+      GlobalMessage
     },
     data () {
       return {
@@ -53,14 +47,18 @@
       }
     },
     methods: {
-      // ログインボタン押下時に呼び出されるメソッド
+      // ログインボタン押下
       submitLogin: function () {
-        userService.login(this.form.username, this.form.password)
+        // ログイン
+        this.$store.dispatch('user/login', {
+          username: this.form.username,
+          password: this.form.password
+        })
           .then(user => {
+            console.log('Login succeeded.')
             this.$store.dispatch('messages/setInfoMessage', { message: 'ログインしました。' })
             const next = this.$route.query.next || '/'
             this.$router.replace(next)
-            console.log('Login succeeded.')
           })
       }
     }

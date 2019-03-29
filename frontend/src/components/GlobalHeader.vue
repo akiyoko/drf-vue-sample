@@ -17,8 +17,6 @@
 </template>
 
 <script>
-  import userService from '@/services/userService'
-
   export default {
     computed: {
       username: function () {
@@ -29,13 +27,13 @@
       }
     },
     methods: {
-      // ログアウトリンク押下時に呼び出されるメソッド
+      // ログアウトリンク押下
       clickLogout: function () {
-        userService.logout()
+        this.$store.dispatch('user/logout')
         this.$store.dispatch('messages/setInfoMessage', { message: 'ログアウトしました。' })
         this.$router.replace('/login')
       },
-      // ログインリンク押下時に呼び出されるメソッド
+      // ログインリンク押下
       clickLogin: function () {
         this.$store.dispatch('messages/clearMessages')
         this.$router.replace('/login')

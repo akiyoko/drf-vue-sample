@@ -3,7 +3,7 @@
     <GlobalHeader/>
     <GlobalMessage/>
 
-    <!-- メイン -->
+    <!-- メインエリア -->
     <main class="container">
       <p class="h5 mb-4">ホーム</p>
       <b-form @submit.prevent="submitSave">
@@ -26,9 +26,6 @@
         </div>
       </b-form>
     </main>
-
-    <!-- For debug -->
-    <debug :data="$data">HomePage</debug>
   </div>
 </template>
 
@@ -36,13 +33,11 @@
   import api from '@/services/api'
   import GlobalHeader from '@/components/GlobalHeader.vue'
   import GlobalMessage from '@/components/GlobalMessage.vue'
-  import Debug from '@/components/Debug.vue'
 
   export default {
     components: {
       GlobalHeader,
-      GlobalMessage,
-      Debug
+      GlobalMessage
     },
     data: function () {
       return {
@@ -63,7 +58,7 @@
       console.log('HomePage ... mounted!')
     },
     methods: {
-      // 登録・更新ボタン押下時に呼び出されるメソッド
+      // 登録・更新ボタン押下
       submitSave: function () {
         api({
           method: this.isCreated ? 'put' : 'post',
