@@ -1,6 +1,6 @@
 import os
+from datetime import timedelta
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
 
@@ -129,7 +129,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('JWT',),  # 追加
+    'AUTH_HEADER_TYPES': ('JWT',),                   # 追加
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # 追加
 }
 
 

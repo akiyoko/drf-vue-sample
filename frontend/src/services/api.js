@@ -1,6 +1,5 @@
 import axios from 'axios'
 import store from '@/store'
-import config from '@/config'
 
 const api = axios.create({
   baseURL: process.env.VUE_APP_ROOT_API,
@@ -30,16 +29,14 @@ api.interceptors.request.use(function (config) {
 api.interceptors.response.use(function (response) {
   return response
 }, function (error) {
-  console.log('error=', error)
   console.log('error.response=', error.response)
   const status = error.response ? error.response.status : 500
-  console.log('status=', status)
 
   // エラーの内容に応じてstoreのメッセージを更新
   let message
   if (status === 400) {
     // バリデーションNG
-    let messages = Object.entries(error.response.data)
+    let messages = [].concat.apply([], Object.values(error.response.data))
     store.dispatch('message/setWarningMessages', { messages: messages })
 
   } else if (status === 401) {
@@ -61,7 +58,7 @@ api.interceptors.response.use(function (response) {
 
   } else {
     // その他のエラー
-    message = error.statusText ? error.statusText : '想定外のエラーです。'
+    message = '想定外のエラーです。'
     store.dispatch('message/setErrorMessage', { message: message })
   }
   return Promise.reject(error)

@@ -57,7 +57,7 @@ router.beforeEach((to, from, next) => {
     }
 
   } else {
-    console.log('Going to public page.')
+    console.log('Go to public page.')
     next()
   }
 })

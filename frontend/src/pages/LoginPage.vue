@@ -32,7 +32,6 @@
 <script>
   import GlobalHeader from '@/components/GlobalHeader.vue'
   import GlobalMessage from '@/components/GlobalMessage.vue'
-  //import Cookies from 'js-cookie';
 
   export default {
     components: {
@@ -47,12 +46,6 @@
         }
       }
     },
-    mounted () {
-      console.log("@@@ cookie=", Cookies.get('access'))
-      console.log("@@@ sessionid=", Cookies.get('sessionid'))
-      console.log("@@@ csrftoken=", Cookies.get('csrftoken'))
-      console.log("@@@ djdt=", Cookies.get('djdt'))
-    },
     methods: {
       // ログインボタン押下
       submitLogin: function () {
@@ -64,6 +57,7 @@
           .then(() => {
             console.log('Login succeeded.')
             this.$store.dispatch('message/setInfoMessage', { message: 'ログインしました。' })
+            // クエリ文字列に「next」がなければ、ホーム画面へ
             const next = this.$route.query.next || '/'
             this.$router.replace(next)
           })

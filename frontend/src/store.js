@@ -4,6 +4,7 @@ import api from '@/services/api'
 
 Vue.use(Vuex)
 
+// 認証情報
 const authModule = {
   strict: process.env.NODE_ENV !== 'production',
   namespaced: true,
@@ -66,6 +67,7 @@ const authModule = {
   }
 }
 
+// グローバルメッセージ
 const messageModule = {
   strict: process.env.NODE_ENV !== 'production',
   namespaced: true,
