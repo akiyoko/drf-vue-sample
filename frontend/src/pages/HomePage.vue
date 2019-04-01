@@ -54,9 +54,6 @@
         return this.form.book.id !== undefined
       }
     },
-    mounted: function () {
-      console.log('HomePage ... mounted!')
-    },
     methods: {
       // 登録・更新ボタン押下
       submitSave: function () {

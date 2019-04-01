@@ -32,6 +32,7 @@
 <script>
   import GlobalHeader from '@/components/GlobalHeader.vue'
   import GlobalMessage from '@/components/GlobalMessage.vue'
+  //import Cookies from 'js-cookie';
 
   export default {
     components: {
@@ -45,6 +46,12 @@
           password: ''
         }
       }
+    },
+    mounted () {
+      console.log("@@@ cookie=", Cookies.get('access'))
+      console.log("@@@ sessionid=", Cookies.get('sessionid'))
+      console.log("@@@ csrftoken=", Cookies.get('csrftoken'))
+      console.log("@@@ djdt=", Cookies.get('djdt'))
     },
     methods: {
       // ログインボタン押下
