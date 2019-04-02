@@ -2,9 +2,7 @@
   <!-- ヘッダナビゲーション -->
   <div id="header">
     <b-navbar type="dark" variant="dark">
-      <a class="navbar-brand" href="/">
-        <img src="@/assets/images/logo.png" width="120">
-      </a>
+      <a class="navbar-brand" href="/">DRF Sample</a>
       <b-navbar-nav class="ml-auto" v-if="$route.meta.requiresAuth">
         <b-nav-item-dropdown right v-if="isLoggedIn">
           <template slot="button-content">{{ username }}</template>

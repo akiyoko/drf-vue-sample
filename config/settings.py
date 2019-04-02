@@ -2,7 +2,6 @@ import os
 from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
@@ -52,7 +51,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(FRONTEND_DIR, 'dist')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -114,10 +113,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(FRONTEND_DIR, 'dist', 'static'),
-    os.path.join(FRONTEND_DIR, 'src', 'assets'),
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 
 

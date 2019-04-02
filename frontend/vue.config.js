@@ -1,4 +1,7 @@
 module.exports = {
-  assetsDir: 'static',
-  publicPath: '/',
+  outputDir: '../static',
+  indexPath: '../templates/index.html',
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/static/'
+    : '/'
 }

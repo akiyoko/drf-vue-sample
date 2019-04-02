@@ -47,7 +47,6 @@ api.interceptors.response.use(function (response) {
     } else {
       message = '認証エラー'
     }
-    // TODO: ログアウト
     store.dispatch('auth/logout')
     store.dispatch('message/setErrorMessage', { message: message })
 
