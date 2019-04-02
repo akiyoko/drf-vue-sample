@@ -57,6 +57,7 @@ router.beforeEach((to, from, next) => {
     }
 
   } else {
+    // ログインが不要な画面であればそのまま次へ
     console.log('Go to public page.')
     next()
   }
@@ -69,6 +70,7 @@ function forceToLoginPage (to, from, next) {
   console.log('Force user to login page.')
   next({
     path: '/login',
+    // 遷移先のURLはクエリ文字列として付加
     query: { next: to.fullPath }
   })
 }
