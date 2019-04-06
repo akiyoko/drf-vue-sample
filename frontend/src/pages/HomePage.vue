@@ -58,6 +58,7 @@
       // 登録・更新ボタン押下
       submitSave: function () {
         api({
+          // 登録済みかどうかでHTTPメソッドとエンドポイントを切り替える
           method: this.isCreated ? 'put' : 'post',
           url: this.isCreated ? '/books/' + this.form.book.id + '/' : '/books/',
           data: {
